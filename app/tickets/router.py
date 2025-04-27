@@ -29,8 +29,9 @@ async def add_ticket(order_id: int, ticket: SAddTicket):
 async def update_ticket(order_id: int, ticket_id: int, ticket_data: SUpdateTicket = Depends()):
     await OrderDAO.check_order(order_id)
     await TicketDAO.check_ticket(ticket_id)
+    update_dict = ticket_data.dict(exclude_none=True)
 
-    updated_rows = await TicketDAO.update_ticket_info(ticket_id, **ticket_data.dict())
+    updated_rows = await TicketDAO.update_ticket_info(ticket_id, **update_dict)
 
     if updated_rows == 0:
         return {"message": f"Не удалось обновить билет {ticket_id}"}
