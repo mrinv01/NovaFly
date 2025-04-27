@@ -1,13 +1,16 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
+from typing import Optional
 
-class SAirport(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+class SAirportBase(BaseModel):
+    city: str = Field(..., title="Город")
+    airport_code: str = Field(..., title="Код аэропорта (например, SVO, JFK)")
+
+class SAirportCreate(SAirportBase):
+    pass
+
+class SAirportUpdate(BaseModel):
+    city: Optional[str] = Field(None, title="Город")
+    airport_code: Optional[str] = Field(None, title="Код аэропорта")
+
+class SAirportOut(SAirportBase):
     id: int
-    city: str = Field(..., title="Город")
-    airport_code: str = Field(..., title="Код ИАТА аэропорта (Например: KRR-код аэропорта Краснодара")
-
-class SAddAirport(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    city: str = Field(..., title="Город")
-    airport_code: str = Field(..., title="Код ИАТА аэропорта (Например: KRR-код аэропорта Краснодара")
-

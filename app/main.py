@@ -4,6 +4,7 @@ from app.planes.router import router as router_plane
 from app.orders.router import router as router_orders
 from app.tickets.router import router as router_tickets
 from app.passengers.router import router as router_passengers
+from app.airports.router import router as router_airports
 
 def register_routes(app: FastAPI) -> None:
     root_router = APIRouter()
@@ -19,6 +20,7 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(router_orders)
     app.include_router(router_tickets)
     app.include_router(router_passengers)
+    app.include_router(router_airports)
 
 
 def create_app() -> FastAPI:

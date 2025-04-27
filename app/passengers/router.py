@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from app.passengers.schemas import SCreatePassenger, SUpdatePassenger, SPassengerOut
 from app.passengers.dao import PassengerDAO
 from app.passengers.rb import RBPassenger
-from app.exceptions.PassengerExceptions import InformationNotFoundException
+from app.exceptions.PassengerExceptions import PassengerExceptions, InformationNotFoundException
 
 router = APIRouter(prefix="/passengers", tags=["Работа с пассажирами"])
 
@@ -42,5 +42,5 @@ async def update_passenger(passenger_id: int, passenger_data: SUpdatePassenger):
 async def delete_passenger(passenger_id: int):
     deleted_rows = await PassengerDAO.delete(id=passenger_id)
     if deleted_rows == 0:
-        return {"message": f"Пассажир с id {passenger_id} не найден."}
+        raise PassengerExceptions.PassengerNotFound(passenger_id)
     return {"message": f"Пассажир {passenger_id} успешно удален."}
