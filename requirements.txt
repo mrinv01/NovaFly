@@ -1,0 +1,8 @@
+sqlalchemy~=2.0.40
+fastapi[all]~=0.115.12
+uvicorn[standard]
+requests
+psycopg2-binary
+pydantic~=2.11.3
+pydantic-settings~=2.8.1
+alembic~=1.15.2
