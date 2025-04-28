@@ -1,4 +1,5 @@
 sqlalchemy~=2.0.40
+asyncpg
 fastapi[all]~=0.115.12
 uvicorn[standard]
 requests

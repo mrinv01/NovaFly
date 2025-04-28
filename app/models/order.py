@@ -7,7 +7,7 @@ class Order(Base):
     id: Mapped[int_pk]
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-    status: Mapped[str] = mapped_column(default= "Создан", server_default=text("Создан"))
+    status: Mapped[str] = mapped_column(default= "Создан")
 
     user: Mapped["User"] = relationship("User", back_populates="orders")
     tickets: Mapped[list["Ticket"]] = relationship("Ticket", back_populates="order")
