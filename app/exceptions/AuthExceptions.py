@@ -21,7 +21,8 @@ UserIdNotFoundException = HTTPException(
 # Неверная почта или пароль
 IncorrectEmailOrPasswordException = HTTPException(
     status_code=status.HTTP_400_BAD_REQUEST,
-    detail='Неверная почта или пароль'
+    detail='Неверная почта или пароль',
+    headers={"WWW-Authenticate": "Bearer"}
 )
 
 # Токен истек

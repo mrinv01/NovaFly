@@ -2,11 +2,13 @@ from fastapi import APIRouter, Depends, Path, Query
 from app.airports.schemas import SAirportCreate, SAirportOut, SAirportUpdate
 from app.airports.dao import AirportDAO
 from app.exceptions.AirportExceptions import AirportExceptions, InformationNotFoundException
+from app.security.deps import get_current_admin_user
+from app.models import User
 
 router = APIRouter(prefix="/airports", tags=["Работа с аэропортами"])
 
 @router.post("/", summary="Создать аэропорт", response_model=SAirportOut)
-async def create_airport(airport: SAirportCreate):
+async def create_airport(airport: SAirportCreate, user: User = Depends(get_current_admin_user)):
     created_airport = await AirportDAO.add(**airport.dict())
     return created_airport
 
@@ -30,7 +32,7 @@ async def search_airports_by_city(city: str = Query(..., title="Часть на�
     return airports
 
 @router.put("/{airport_id}", summary="Обновить данные аэропорта", response_model=SAirportOut)
-async def update_airport(airport_id: int, airport_update: SAirportUpdate):
+async def update_airport(airport_id: int, airport_update: SAirportUpdate, user: User = Depends(get_current_admin_user)):
     updated_fields = airport_update.dict(exclude_none=True)
     updated_rows = await AirportDAO.update({"id": airport_id}, **updated_fields)
     if updated_rows == 0:
@@ -39,7 +41,7 @@ async def update_airport(airport_id: int, airport_update: SAirportUpdate):
     return updated_airport
 
 @router.delete("/{airport_id}", summary="Удалить аэропорт")
-async def delete_airport(airport_id: int):
+async def delete_airport(airport_id: int, user: User = Depends(get_current_admin_user)):
     deleted_rows = await AirportDAO.delete(id=airport_id)
     if deleted_rows == 0:
         raise AirportExceptions.AirportNotFound(airport_id)

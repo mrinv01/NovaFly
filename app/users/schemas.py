@@ -1,5 +1,5 @@
 import re
-from typing import Self
+from typing import Self, Optional
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator, computed_field
 from app.security.hash import get_password_hash
 
@@ -39,6 +39,15 @@ class RoleModel(BaseModel):
     name: str = Field(description="Название роли")
     model_config = ConfigDict(from_attributes=True)
 
+class UserResponseSchema(BaseModel):
+    id: int
+    surname: str
+    name: str
+    email: str
+    role_id: int
+
+    class Config:
+        orm_mode = True
 
 class SUserInfo(UserBase):
     id: int = Field(description="Идентификатор пользователя")

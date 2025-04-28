@@ -3,25 +3,24 @@ from app.orders.schemas import OrderSchema, SAddOrder, SUpdateOrder
 from app.orders.dao import OrderDAO
 from app.users.dao import UserDAO
 from app.exceptions.OrderExceptions import OrderExceptions
+from app.security.deps import get_current_user
+
 
 router = APIRouter(prefix = "/orders", tags = ["Работа с заказами"])
 
-@router.get("/{user_id}", summary = "Получить все заказы пользователя")
-async def get_orders_by_user(user_id: int) -> list[OrderSchema]:
+@router.get("/all", summary = "Получить все заказы пользователя")
+async def get_orders_by_user(current_user = Depends(get_current_user)) -> list[OrderSchema]:
+    user_id = int(current_user.id)
     result = await OrderDAO.find_all(user_id=user_id)
     if not result:
-        raise OrderExceptions.UserNotFound(user_id)
+        raise OrderExceptions.OrderNotFound(user_id)
     return result
 
 @router.post("/add/", summary = "Создание заказа для пользователя")
-async def add_order(order: SAddOrder = Depends()) -> list[OrderSchema] | dict:
-    user = await UserDAO.find_one_or_none_by_id(order.user_id)
-    if not user:
-        return {"message": f"Пользователь с id {order.user_id} не существует!"}
-
-    check = await OrderDAO.add(** order.dict())
+async def add_order(current_user = Depends(get_current_user)) -> list[OrderSchema] | dict:
+    check = await OrderDAO.add(user_id=current_user.id)
     if check:
-        return {"message": "Заказ успешно создан!", "order_id": order.id}
+        return {"message": "Заказ успешно создан!", "order_id": check.id}
     else:
         return {"message": "При создании заказа произошла ошибка!"}
 

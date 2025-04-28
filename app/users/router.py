@@ -1,20 +1,10 @@
-from fastapi import APIRouter, HTTPException, status
-from app.security.hash import get_password_hash
+from fastapi import APIRouter, Depends, HTTPException, status
 from app.users.dao import UserDAO
-from app.users.schemas import SUserRegister, SUserAddDB
+from app.users.schemas import UserResponseSchema
+from app.security.deps import get_current_user
 
+router = APIRouter(prefix="/users", tags=["Пользователи"])
 
-router = APIRouter(prefix='/auth', tags=['Аутентификация'])
-
-@router.post("/register/", summary="Регистрация пользователя")
-async def register_user(user_data: SUserRegister) -> dict:
-    user = await UserDAO.find_one_or_none(email=user_data.email)
-    if user:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail='Пользователь уже существует'
-        )
-    user_data_dict = user_data.model_dump()
-    user_data_dict.pop('confirm_password', None)
-    await UserDAO.add( **user_data_dict)
-    return {'message': 'Вы успешно зарегистрированы!'}
+@router.get("/me", response_model=UserResponseSchema)
+async def read_users_me(current_user = Depends(get_current_user)):
+    return current_user

@@ -34,7 +34,7 @@ class BaseDAO:
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**filter_by)
             result = await session.execute(query)
-            return result.scalars().all()
+            return result.scalar_one_or_none()
 
     @classmethod
     async def add(cls, **values):

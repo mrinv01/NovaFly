@@ -3,6 +3,9 @@ from app.flights.dao import FlightDAO
 from app.flights.rb import RBFlight
 from app.flights.schemas import FlightSchema, SAddFlight, SUpdateFlight
 from app.exceptions.FlightExceptions import InformationNotFoundException
+from app.security.deps import get_current_admin_user
+from app.models.user import User
+
 
 router = APIRouter(prefix="/flights", tags=["Работа с рейсами"])
 
@@ -25,7 +28,7 @@ async def get_flight_by_id(id: int) -> FlightSchema | dict:
     return result
 
 @router.post("/add/", summary="Создать новый рейс")
-async def add_flight(flight: SAddFlight = Depends()) -> dict:
+async def add_flight(flight: SAddFlight = Depends(), user: User = Depends(get_current_admin_user)) -> dict:
     check = await FlightDAO.add(** flight.dict())
     if check:
         return {"message": "Рейс успешно создан!", "flight": flight}
@@ -33,7 +36,7 @@ async def add_flight(flight: SAddFlight = Depends()) -> dict:
         return {"message": "При создании рейса произошла ошибка!"}
 
 @router.put("/{flight_id}", summary="Обновление информации о рейсе")
-async def update_flight(flight_id: int, update_data: SUpdateFlight=Depends()):
+async def update_flight(flight_id: int, update_data: SUpdateFlight=Depends(), user: User = Depends(get_current_admin_user)):
     update_dict = update_data.dict(exclude_none=True)
     updated_rows = await FlightDAO.update_flight_info(flight_id, **update_dict)
     if updated_rows == 0:

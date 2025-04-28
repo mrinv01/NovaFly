@@ -6,7 +6,7 @@ from app.exceptions.TicketExceptions import TicketExceptions
 
 router = APIRouter(prefix="/tickets", tags=["Работа с билетами"])
 
-@router.get("{order_id}/all", summary = "Получение всех билетов из заказа")
+@router.get("/{order_id}/", summary = "Получение всех билетов из заказа")
 async def get_all_tickets(order_id: int) -> list[TicketSchema] | dict:
     await OrderDAO.check_order(order_id)
     tickets = await TicketDAO.find_all(order_id=order_id)
