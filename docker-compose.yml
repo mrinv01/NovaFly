@@ -2,10 +2,10 @@ version: "3.8"
 
 services:
   db:
-    image: postgres:16
+    image: postgres:17
     restart: always
     environment:
-      POSTGRES_DB: fly_control
+      POSTGRES_DB: fast_api
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -23,7 +23,7 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: 5432
-      DB_NAME: fly_control
+      DB_NAME: fast_api
       DB_USER: postgres
       DB_PASSWORD: postgres
     depends_on:
