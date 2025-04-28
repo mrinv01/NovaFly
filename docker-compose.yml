@@ -1,33 +1,11 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  db:
-    image: postgres:17
-    restart: always
-    environment:
-      POSTGRES_DB: fast_api
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  app:
+  flycontrol:
     build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    container_name: flycontrol_app
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: fast_api
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-    depends_on:
-      - db
-
-volumes:
-  postgres_data:
+    env_file:
+      - .env
+    restart: unless-stopped
