@@ -1,7 +1,7 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from app.security.jwt import decode_access_token
-from app.users.dao import UserDAO
+from app.repositories.user_repository import UserDAO
 from app.models.user import User
 from app.exceptions.AuthExceptions import *
 

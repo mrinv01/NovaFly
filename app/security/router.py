@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
-from app.users.dao import UserDAO
-from app.users.schemas import SUserRegister
+from app.repositories.user_repository import UserDAO
+from app.schemas.user_schema import SUserRegister
 from app.security.hash import verify_password
 from app.security.jwt import create_access_token, create_refresh_token
 from app.config import settings

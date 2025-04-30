@@ -1,7 +1,7 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import update as sqlalchemy_update
 from app.models.flight import Flight
-from app.dao.base import BaseDAO
+from app.repositories.base_repository import BaseDAO
 from app.database import async_session_maker
 
 

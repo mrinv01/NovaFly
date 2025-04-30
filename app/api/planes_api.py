@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
-from app.planes.dao import PlaneDAO
-from app.planes.schemas import PlaneSchema, PlaneSchemaAdd
+from app.repositories.plane_repository import PlaneDAO
+from app.schemas.plane_schemas import PlaneSchema, PlaneSchemaAdd
 from app.security.deps import get_current_admin_user
 from app.models import User
 

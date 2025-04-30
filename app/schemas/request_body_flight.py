@@ -1,5 +1,5 @@
 from datetime import datetime
-class RBFlight:
+class RequestBodyFlight:
     def __init__(self,
                  plane_id: int | None = None,
                  departure_from: int | None = None,

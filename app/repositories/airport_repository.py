@@ -1,4 +1,4 @@
-from app.dao.base import BaseDAO
+from app.repositories.base_repository import BaseDAO
 from app.models.airports import Airport
 from app.database import async_session_maker
 from sqlalchemy import select

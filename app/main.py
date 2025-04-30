@@ -1,11 +1,11 @@
 from fastapi import FastAPI, APIRouter
-from app.flights.router import router as router_flights
-from app.planes.router import router as router_plane
-from app.orders.router import router as router_orders
-from app.tickets.router import router as router_tickets
-from app.passengers.router import router as router_passengers
-from app.airports.router import router as router_airports
-from app.users.router import router as router_users
+from app.api.flights_api import router as router_flights
+from app.api.planes_api import router as router_plane
+from app.api.orders_api import router as router_orders
+from app.api.tickets_api import router as router_tickets
+from app.api.passengers_api import router as router_passengers
+from app.api.airports_api import router as router_airports
+from app.api.users_api import router as router_users
 from app.security.router import router as router_security
 
 def register_routes(app: FastAPI) -> None:

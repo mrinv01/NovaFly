@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from app.users.dao import UserDAO
-from app.users.schemas import UserResponseSchema
+from fastapi import APIRouter, Depends
+from app.schemas.user_schema import UserResponseSchema
 from app.security.deps import get_current_user
 
 router = APIRouter(prefix="/users", tags=["Пользователи"])

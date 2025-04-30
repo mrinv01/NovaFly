@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from app.flights.dao import FlightDAO
-from app.flights.rb import RBFlight
-from app.flights.schemas import FlightSchema, SAddFlight, SUpdateFlight
+from app.repositories.flight_repository import FlightDAO
+from app.schemas.request_body_flight import RequestBodyFlight
+from app.schemas.flight_schemas import FlightSchema, SAddFlight, SUpdateFlight
 from app.exceptions.FlightExceptions import InformationNotFoundException
 from app.security.deps import get_current_admin_user
 from app.models.user import User
@@ -14,7 +14,7 @@ async def get_all_flights() -> list[FlightSchema]:
     return await FlightDAO.find_all()
 
 @router.get("/filter/by", summary="Получение рейсов согласно фильтру")
-async def get_flight_by_filter(request_body: RBFlight = Depends()) -> list[FlightSchema]:
+async def get_flight_by_filter(request_body: RequestBodyFlight = Depends()) -> list[FlightSchema]:
     result = await FlightDAO.find_all(**request_body.to_dict())
     if not result:
         raise InformationNotFoundException

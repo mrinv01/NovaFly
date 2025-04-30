@@ -2,7 +2,6 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.future import select
 from sqlalchemy import update as sqlalchemy_update, delete as sqlalchemy_delete
 from app.database import async_session_maker
-from app.flights.schemas import FlightSchema
 
 
 class BaseDAO:
@@ -11,7 +10,7 @@ class BaseDAO:
     @classmethod
     async def find_all(cls, **filter_by):
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(**filter_by)
+            query = select(cls.model).filter_by(**filter_by).order_by(cls.model.id)
             result = await session.execute(query)
             return result.scalars().all()
 

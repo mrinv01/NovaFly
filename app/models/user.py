@@ -12,7 +12,7 @@ class User(Base):
     role_id: Mapped[int] = mapped_column(ForeignKey('roles.id'), default=1, server_default=text("1"))
     role: Mapped["Role"] = relationship("Role", back_populates="users", lazy="joined")
 
-    orders: Mapped[list["Order"]] = relationship("Order", back_populates="user")
+    tickets: Mapped[list["Ticket"]] = relationship("Ticket", back_populates="user")
 
     def __str__(self):
         return (f"{self.__class__.__name__} (id={self.id}, "

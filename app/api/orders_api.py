@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
-from app.orders.schemas import OrderSchema, SAddOrder, SUpdateOrder
-from app.orders.dao import OrderDAO
-from app.users.dao import UserDAO
+from app.schemas.order_schemas import OrderSchema, SUpdateOrder
+from app.repositories.order_repository import OrderDAO
 from app.exceptions.OrderExceptions import OrderExceptions
 from app.security.deps import get_current_user
 

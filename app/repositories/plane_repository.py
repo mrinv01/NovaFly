@@ -1,4 +1,4 @@
-from app.dao.base import BaseDAO
+from app.repositories.base_repository import BaseDAO
 from app.models.plane import Plane
 
 

@@ -1,4 +1,4 @@
-from app.dao.base import BaseDAO
+from app.repositories.base_repository import BaseDAO
 from app.models.tickets import Ticket
 from sqlalchemy import update as sqlalchemy_update, select
 from app.database import async_session_maker

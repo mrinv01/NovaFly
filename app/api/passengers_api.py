@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from app.passengers.schemas import SCreatePassenger, SUpdatePassenger, SPassengerOut
-from app.passengers.dao import PassengerDAO
-from app.passengers.rb import RBPassenger
+from app.schemas.passenger_schemas import SCreatePassenger, SUpdatePassenger, SPassengerOut
+from app.repositories.passenger_repository import PassengerDAO
+from app.schemas.request_body_passenger import RBPassenger
 from app.exceptions.PassengerExceptions import PassengerExceptions, InformationNotFoundException
 
 router = APIRouter(prefix="/passengers", tags=["Работа с пассажирами"])

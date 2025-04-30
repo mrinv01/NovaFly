@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, EmailStr, validator, ConfigDict
 class TicketSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    order_id: int = Field(..., title="ИД заказа")
+    user_id: int = Field(..., title="ИД пользователя")
     passenger_id: int = Field(..., title="ИД пассажира")
     flight_id: int = Field(..., title="ИД рейса")
     seat_number: str = Field(..., title="Номер места")

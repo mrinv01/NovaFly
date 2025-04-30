@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Path, Query
-from app.airports.schemas import SAirportCreate, SAirportOut, SAirportUpdate
-from app.airports.dao import AirportDAO
+from app.schemas.airport_schemas import SAirportCreate, SAirportOut, SAirportUpdate
+from app.repositories.airport_repository import AirportDAO
 from app.exceptions.AirportExceptions import AirportExceptions, InformationNotFoundException
 from app.security.deps import get_current_admin_user
 from app.models import User
