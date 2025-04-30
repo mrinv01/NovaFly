@@ -5,6 +5,8 @@ from app.schemas.flight_schemas import FlightSchema, SAddFlight, SUpdateFlight
 from app.exceptions.FlightExceptions import InformationNotFoundException
 from app.security.deps import get_current_admin_user
 from app.models.user import User
+from app.repositories.plane_repository import PlaneRepository
+from app.repositories.airport_repository import AirportRepository
 
 
 router = APIRouter(prefix="/flights", tags=["Работа с рейсами"])
@@ -29,6 +31,10 @@ async def get_flight_by_id(id: int) -> FlightSchema | dict:
 
 @router.post("/add/", summary="Создать новый рейс")
 async def add_flight(flight: SAddFlight = Depends(), user: User = Depends(get_current_admin_user)) -> dict:
+    await PlaneRepository.check_plane(flight.plane_id)
+    await AirportRepository.check_airport(flight.departure_from)
+    await AirportRepository.check_airport(flight.arrival_to)
+
     check = await FlightDAO.add(** flight.dict())
     if check:
         return {"message": "Рейс успешно создан!", "flight": flight}

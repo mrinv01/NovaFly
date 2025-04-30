@@ -3,6 +3,8 @@ from app.schemas.ticket_schemas import TicketSchema, SAddTicket, SUpdateTicket
 from app.repositories.ticket_repository import TicketDAO
 from app.exceptions.TicketExceptions import TicketExceptions
 from app.security.deps import get_current_admin_user, get_current_user
+from app.repositories.passenger_repository import PassengerDAO
+from app.repositories.flight_repository import FlightDAO
 
 router = APIRouter(prefix="/tickets", tags=["Работа с билетами"])
 
@@ -21,7 +23,10 @@ async def get_ticket_by_user(user_id: int, current_user = Depends(get_current_ad
     return tickets
 
 @router.post("/add", summary = "Создание билета")
-async def add_ticket(ticket: SAddTicket, current_user = Depends(get_current_user)):
+async def add_ticket(ticket: SAddTicket = Depends(), current_user = Depends(get_current_user)):
+    await PassengerDAO.check_passenger(ticket.passenger_id)
+    await FlightDAO.check_flight(ticket.flight_id)
+
     ticket_dict = ticket.model_dump()
     ticket_dict["user_id"] = current_user.id
     new_ticket = await TicketDAO.add(**ticket_dict)

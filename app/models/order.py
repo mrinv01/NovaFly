@@ -9,8 +9,8 @@ class Order(Base):
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     status: Mapped[str] = mapped_column(default= "Создан")
 
-    user: Mapped["User"] = relationship("User", back_populates="orders")
-    tickets: Mapped[list["Ticket"]] = relationship("Ticket", back_populates="order")
+    #user: Mapped["User"] = relationship("User", back_populates="orders")
+    #tickets: Mapped[list["Ticket"]] = relationship("Ticket", back_populates="order")
 
     def __str__(self):
         return f"{self.__class__.__name__} (id={self.id}, user_id={self.user_id}, created_at={self.created_at})"

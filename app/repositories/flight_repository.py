@@ -1,12 +1,22 @@
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import update as sqlalchemy_update
+from sqlalchemy import update as sqlalchemy_update, select
 from app.models.flight import Flight
 from app.repositories.base_repository import BaseDAO
 from app.database import async_session_maker
+from app.exceptions.FlightExceptions import FlightExceptions
 
 
 class FlightDAO(BaseDAO):
     model = Flight
+
+    @classmethod
+    async def check_flight(cls, flight_id: int):
+        async with async_session_maker() as session:
+            query = select(cls.model).filter_by(id=flight_id)
+            result_order = await session.execute(query)
+            order = result_order.scalar_one_or_none()
+            if not order:
+                raise FlightExceptions.FlightNotFound(flight_id)
 
     @classmethod
     async def update_flight_info(cls, flight_id: int, **update_fields) -> int:

@@ -7,7 +7,7 @@ class RBPassenger:
                  name: str | None = None,
                  patronymic: str | None = None,
                  date_of_birth: date | None = None,
-                 document_number: str | None = None):
+                 document_number: int | None = None):
         self.id = id
         self.surname = surname
         self.name = name

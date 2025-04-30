@@ -1,7 +1,6 @@
 from fastapi import FastAPI, APIRouter
 from app.api.flights_api import router as router_flights
 from app.api.planes_api import router as router_plane
-from app.api.orders_api import router as router_orders
 from app.api.tickets_api import router as router_tickets
 from app.api.passengers_api import router as router_passengers
 from app.api.airports_api import router as router_airports
@@ -19,7 +18,6 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(root_router, tags=["Приветствие"])
     app.include_router(router_flights)
     app.include_router(router_plane)
-    app.include_router(router_orders)
     app.include_router(router_tickets)
     app.include_router(router_passengers)
     app.include_router(router_airports)

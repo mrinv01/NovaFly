@@ -31,7 +31,7 @@ async def get_flight_by_id(id: int) -> SPassengerOut | dict:
     return result
 
 @router.put("/{passenger_id}", summary="Обновить данные пассажира")
-async def update_passenger(passenger_id: int, passenger_data: SUpdatePassenger):
+async def update_passenger(passenger_id: int, passenger_data: SUpdatePassenger = Depends()):
     update_data = passenger_data.dict(exclude_none=True)
     updated_rows = await PassengerDAO.update({"id": passenger_id}, **update_data)
     if updated_rows == 0:
