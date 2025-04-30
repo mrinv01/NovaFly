@@ -5,6 +5,11 @@ InformationNotFoundException = HTTPException(
     detail="Нет рейсов, которые соответствуют условиям поиска"
 )
 
+NoFlights = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail="Нет рейсов для отображения"
+)
+
 class FlightExceptions(HTTPException):
     def FlightNotFound(flight_id: int):
         exception = HTTPException(
