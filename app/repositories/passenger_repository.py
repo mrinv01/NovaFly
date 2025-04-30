@@ -1,10 +1,10 @@
 from sqlalchemy import select
-from app.repositories.base_repository import BaseDAO
+from app.repositories.base_repository import BaseRepository
 from app.database import async_session_maker
 from app.models.passenger import Passenger
 from app.exceptions.PassengerExceptions import PassengerExceptions
 
-class PassengerDAO(BaseDAO):
+class PassengerRepository(BaseRepository):
     model = Passenger
 
     @classmethod

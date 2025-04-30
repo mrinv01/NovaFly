@@ -1,11 +1,11 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import update as sqlalchemy_update, select
 from app.models.order import Order
-from app.repositories.base_repository import BaseDAO
+from app.repositories.base_repository import BaseRepository
 from app.database import async_session_maker
 from app.exceptions.OrderExceptions import OrderExceptions
 
-class OrderDAO(BaseDAO):
+class OrderRepository(BaseRepository):
     model = Order
 
     @classmethod

@@ -1,4 +1,4 @@
-from app.repositories.flight_repository import FlightDAO
+from app.repositories.flight_repository import FlightRepository
 from app.repositories.plane_repository import PlaneRepository
 from app.repositories.airport_repository import AirportRepository
 from app.schemas.request_body_flight import RequestBodyFlight
@@ -10,21 +10,21 @@ class FlightService:
 
     @staticmethod
     async def get_all_flights():
-        result = await FlightDAO.find_all()
+        result = await FlightRepository.find_all()
         if not result:
             raise NoFlights
         return result
 
     @staticmethod
     async def get_flight_by_filter(request_body: RequestBodyFlight):
-        result = await FlightDAO.find_all(**request_body.to_dict())
+        result = await FlightRepository.find_all(**request_body.to_dict())
         if not result:
             raise InformationNotFoundException
         return result
 
     @staticmethod
     async def get_flight_by_id(flight_id: int):
-        result = await FlightDAO.find_one_or_none_by_id(flight_id)
+        result = await FlightRepository.find_one_or_none_by_id(flight_id)
         if result is None:
             raise InformationNotFoundException
         return result
@@ -35,7 +35,7 @@ class FlightService:
         await AirportRepository.check_airport(flight.departure_from)
         await AirportRepository.check_airport(flight.arrival_to)
 
-        check = await FlightDAO.add(**flight.dict())
+        check = await FlightRepository.add(**flight.dict())
         if check:
             return {"message": "Рейс успешно создан!", "flight": flight}
         return {"message": "При создании рейса произошла ошибка!"}
@@ -43,7 +43,7 @@ class FlightService:
     @staticmethod
     async def update_flight(flight_id: int, update_data: SUpdateFlight):
         update_dict = update_data.dict(exclude_none=True)
-        updated_rows = await FlightDAO.update_flight_info(flight_id, **update_dict)
+        updated_rows = await FlightRepository.update_flight_info(flight_id, **update_dict)
         if updated_rows == 0:
             raise InformationNotFoundException
         return {"message": f"Рейс {flight_id} успешно обновлён"}

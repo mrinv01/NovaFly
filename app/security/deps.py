@@ -1,7 +1,7 @@
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from app.security.jwt import decode_access_token
-from app.repositories.user_repository import UserDAO
+from app.repositories.user_repository import UserRepository
 from app.models.user import User
 from app.exceptions.AuthExceptions import *
 
@@ -15,7 +15,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             detail="Не удалось проверить учетные данные",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    user = await UserDAO.find_one_or_none_by_id(user_id)
+    user = await UserRepository.find_one_or_none_by_id(user_id)
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

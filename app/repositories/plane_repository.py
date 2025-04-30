@@ -1,4 +1,4 @@
-from app.repositories.base_repository import BaseDAO
+from app.repositories.base_repository import BaseRepository
 from app.models.plane import Plane
 from sqlalchemy import update as sqlalchemy_update, select
 from app.database import async_session_maker
@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.exceptions.PlaneExceptions import InformationNotFoundException
 
 
-class PlaneRepository(BaseDAO):
+class PlaneRepository(BaseRepository):
     model = Plane
 
     @classmethod

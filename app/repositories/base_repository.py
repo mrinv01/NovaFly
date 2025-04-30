@@ -4,7 +4,7 @@ from sqlalchemy import update as sqlalchemy_update, delete as sqlalchemy_delete
 from app.database import async_session_maker
 
 
-class BaseDAO:
+class BaseRepository:
     model = None
 
     @classmethod

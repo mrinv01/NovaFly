@@ -1,10 +1,10 @@
-from app.repositories.base_repository import BaseDAO
+from app.repositories.base_repository import BaseRepository
 from app.models.airports import Airport
 from app.database import async_session_maker
 from sqlalchemy import select
 from app.exceptions.AirportExceptions import AirportExceptions
 
-class AirportRepository(BaseDAO):
+class AirportRepository(BaseRepository):
     model = Airport
 
     @classmethod

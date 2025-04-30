@@ -1,11 +1,11 @@
-from app.repositories.base_repository import BaseDAO
+from app.repositories.base_repository import BaseRepository
 from app.models.tickets import Ticket
 from sqlalchemy import update as sqlalchemy_update, select
 from app.database import async_session_maker
 from sqlalchemy.exc import SQLAlchemyError
 from app.exceptions.TicketExceptions import TicketExceptions
 
-class TicketDAO(BaseDAO):
+class TicketRepository(BaseRepository):
     model = Ticket
 
     @classmethod
