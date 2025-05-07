@@ -64,7 +64,7 @@ class BaseRepository:
                 except SQLAlchemyError as e:
                     await session.rollback()
                     raise e
-                return result.rowcount
+                return result, result.rowcount
 
     @classmethod
     async def delete(cls, delete_all: bool = False, **filter_by):
@@ -75,6 +75,22 @@ class BaseRepository:
             async with session.begin():
                 query = sqlalchemy_delete(cls.model).filter_by(**filter_by)
                 result = await session.execute(query)
+                try:
+                    await session.commit()
+                except SQLAlchemyError as e:
+                    await session.rollback()
+                    raise e
+                return result.rowcount
+
+    @classmethod
+    async def delete_by_ids(cls, ids: list[int]) -> int:
+        if not ids:
+            raise ValueError("Список ID не может быть пустым.")
+
+        async with async_session_maker() as session:
+            async with session.begin():
+                stmt = sqlalchemy_delete(cls.model).where(cls.model.id.in_(ids))
+                result = await session.execute(stmt)
                 try:
                     await session.commit()
                 except SQLAlchemyError as e:

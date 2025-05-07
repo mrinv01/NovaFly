@@ -1,6 +1,5 @@
 from jose import jwt, JWTError
-from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.user_schema import SUserRegister
+from app.schemas.user_schema import SUserRegister, SUserAuth
 from app.repositories.user_repository import UserRepository
 from app.security.hash import verify_password
 from app.security.jwt import create_access_token, create_refresh_token
@@ -22,17 +21,17 @@ class AuthService:
         return {'message': 'Вы успешно зарегистрированы!'}
 
     @staticmethod
-    async def login_user(form_data: OAuth2PasswordRequestForm) -> dict:
-        user = await UserRepository.find_one_or_none(email=form_data.username)
+    async def login_user(form_data: SUserAuth) -> dict:
+        user = await UserRepository.find_one_or_none(email=form_data.email)
         if not user or not verify_password(form_data.password, user.password):
             raise IncorrectEmailOrPasswordException
 
         access_token = create_access_token(data={"sub": str(user.id)})
-        refresh_token = create_refresh_token(data={"sub": str(user.id)})
+        #refresh_token = create_refresh_token(data={"sub": str(user.id)})
 
         return {
             "access_token": access_token,
-            "refresh_token": refresh_token,
+            #"refresh_token": refresh_token,
             "token_type": "bearer",
         }
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from app.schemas.flight_schemas import FlightSchema, SAddFlight, SUpdateFlight
 from app.schemas.request_body_flight import RequestBodyFlight
 from app.services.flight_service import FlightService
@@ -19,7 +19,7 @@ async def get_flight_by_filter(request_body: RequestBodyFlight = Depends()) -> l
 async def get_flight_by_id(id: int) -> FlightSchema | dict:
     return await FlightService.get_flight_by_id(id)
 
-@router.post("/add/", summary="Создать новый рейс")
+@router.post("/add/", summary="Создать новый рейс", status_code=status.HTTP_201_CREATED)
 async def add_flight(flight: SAddFlight = Depends(),
                      user: User = Depends(get_current_admin_user)) -> dict:
     return await FlightService.add_flight(flight)

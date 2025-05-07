@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from app.schemas.passenger_schemas import SCreatePassenger, SUpdatePassenger, SPassengerOut
 from app.schemas.request_body_passenger import RBPassenger
 from app.services.passenger_service import PassengerService
 
 router = APIRouter(prefix="/passengers", tags=["Работа с пассажирами"])
 
-@router.post("/add/", summary="Создать пассажира", response_model=SPassengerOut)
+@router.post("/add/", summary="Создать пассажира", response_model=SPassengerOut, status_code=status.HTTP_201_CREATED)
 async def create_passenger(passenger_data: SCreatePassenger = Depends()):
     return await PassengerService.create_passenger(passenger_data)
 

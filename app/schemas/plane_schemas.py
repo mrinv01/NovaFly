@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field, ConfigDict
 
 class PlaneSchema(BaseModel):
@@ -8,10 +8,13 @@ class PlaneSchema(BaseModel):
     capacity: int = Field(..., title="Количество мест")
 
 
-class PlaneSchemaAdd(BaseModel):
+class PlaneAddSchema(BaseModel):
     model: str = Field(..., title="Модель самолета")
     capacity: int = Field(..., title="Количество мест")
 
-class PlaneSchemaUpdate(BaseModel):
+class PlaneUpdateSchema(BaseModel):
     model: Optional[str] = Field(None, title="Модель самолета")
     capacity: Optional[int] = Field(None, title="Количество мест")
+
+class PlaneDeleteSchema(BaseModel):
+    ids: List[int]

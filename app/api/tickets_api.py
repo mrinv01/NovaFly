@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from app.schemas.ticket_schemas import TicketSchema, SAddTicket, SUpdateTicket
 from app.security.deps import get_current_admin_user, get_current_user
 from app.services.ticket_service import TicketService
@@ -13,7 +13,7 @@ async def get_all_tickets(current_user=Depends(get_current_user)) -> list[Ticket
 async def get_ticket_by_user(user_id: int, current_user=Depends(get_current_admin_user)) -> list[TicketSchema]:
     return await TicketService.get_user_tickets(user_id)
 
-@router.post("/add", summary="Создание билета")
+@router.post("/add", summary="Создание билета", status_code=status.HTTP_201_CREATED)
 async def add_ticket(ticket: SAddTicket = Depends(), current_user=Depends(get_current_user)):
     return await TicketService.add_ticket(ticket, current_user.id)
 

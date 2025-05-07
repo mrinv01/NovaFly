@@ -1,4 +1,6 @@
 from fastapi import FastAPI, APIRouter
+from fastapi.openapi.utils import get_openapi
+
 from app.api.flights_api import router as router_flights
 from app.api.planes_api import router as router_plane
 from app.api.tickets_api import router as router_tickets
@@ -32,6 +34,7 @@ def create_app() -> FastAPI:
         version="1.0.0"
     )
     register_routes(app)
+
     return app
 
 app = create_app()

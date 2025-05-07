@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Path, Query
+from fastapi import APIRouter, Depends, Path, Query, status
 from app.schemas.airport_schemas import SAirportCreate, SAirportOut, SAirportUpdate
 from app.services.airport_service import AirportService
 from app.security.deps import get_current_admin_user
@@ -6,7 +6,7 @@ from app.models import User
 
 router = APIRouter(prefix="/airports", tags=["Работа с аэропортами"])
 
-@router.post("/", summary="Создать аэропорт", response_model=SAirportOut)
+@router.post("/", summary="Создать аэропорт", response_model=SAirportOut, status_code=status.HTTP_201_CREATED)
 async def create_airport(airport: SAirportCreate, user: User = Depends(get_current_admin_user)):
     return await AirportService.create_airport(airport)
 

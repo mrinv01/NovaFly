@@ -1,5 +1,9 @@
+from http.client import HTTPException
 from app.repositories.plane_repository import PlaneRepository
-from app.schemas.plane_schemas import PlaneSchemaAdd, PlaneSchemaUpdate
+from app.schemas.plane_schemas import PlaneAddSchema, PlaneUpdateSchema, PlaneDeleteSchema
+from app.exceptions.PlaneExceptions import CreateException
+from fastapi import HTTPException
+
 
 
 class PlaneService:
@@ -9,14 +13,14 @@ class PlaneService:
         return await PlaneRepository.find_all()
 
     @staticmethod
-    async def add_plane(plane_data: PlaneSchemaAdd):
+    async def add_plane(plane_data: PlaneAddSchema):
         check = await PlaneRepository.add(**plane_data.model_dump())
-        if check:
-            return {"message": "Самолет успешно добавлен!", "plane": plane_data}
-        return {"message": "Ошибка при добавлении самолета!"}
+        if not check:
+            raise CreateException
+        return check.to_dict()
 
     @staticmethod
-    async def update_plane_info(plane_id: int, plane_data: PlaneSchemaUpdate):
+    async def update_plane_info(plane_id: int, plane_data: PlaneUpdateSchema):
         await PlaneRepository.check_plane(plane_id)
         update_dict = plane_data.model_dump(exclude_none=True)
         updated_rows = await PlaneRepository.update_plane_info(plane_id, **update_dict)
@@ -26,8 +30,10 @@ class PlaneService:
         return {"message": f"Самолет {plane_id} успешно обновлён!"}
 
     @staticmethod
-    async def delete_plane(plane_id: int):
-        check = await PlaneRepository.delete(id=plane_id)
-        if check:
-            return {"message": f"Самолет с ID {plane_id} удален!"}
-        return {"message": "Ошибка при удалении самолета!"}
+    async def delete_plane(request: PlaneDeleteSchema):
+        try:
+            deleted_count = await PlaneRepository.delete_by_ids(request.ids)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+        return {"deleted": deleted_count}

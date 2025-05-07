@@ -1,13 +1,23 @@
-from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import Request, HTTPException, status, Depends, Security
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+bearer_scheme = HTTPBearer(auto_error=False)
+
 from app.security.jwt import decode_access_token
 from app.repositories.user_repository import UserRepository
 from app.models.user import User
-from app.exceptions.AuthExceptions import *
+from app.exceptions.AuthExceptions import ForbiddenException
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+def get_token_from_header(credentials: HTTPAuthorizationCredentials = Security(bearer_scheme)) -> str:
+    if credentials is None or not credentials.credentials:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Требуется авторизация",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return credentials.credentials
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: str = Security(get_token_from_header)):
     user_id = decode_access_token(token)
     if user_id is None:
         raise HTTPException(
