@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, time
 from typing import Optional
 
 from pydantic import BaseModel, Field, ConfigDict
@@ -10,8 +10,10 @@ class FlightSchema(BaseModel):
     plane_id: int = Field(..., title="ID модели самолета")
     departure_from: int = Field(..., title="ID места вылета")
     arrival_to: int = Field(..., title="ID места прилета")
-    departure: datetime = Field(..., title="Дата и время вылета в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС")
-    arrival: datetime = Field(..., title="Дата и время прилета вв формате ГГГГ-ММ-ДД ЧЧ:ММ:СС")
+    departure_date: date = Field(..., title="Дата вылета в формате ГГГГ-ММ-ДД")
+    departure_time: time = Field(..., title="Время вылета в формате ЧЧ:ММ:СС")
+    arrival_date: date = Field(..., title="Дата прилета вв формате ГГГГ-ММ-ДД")
+    arrival_time: time = Field(..., title="Время прилета в формате ЧЧ:ММ:СС")
     status: str = Field(..., title="Статус рейса (Например: Готов, Отменен")
 
 
@@ -20,8 +22,10 @@ class SAddFlight(BaseModel):
     plane_id: int = Field(..., title="ID модели самолета")
     departure_from: int = Field(..., title="ID места вылета")
     arrival_to: int = Field(..., title="ID места прилета")
-    departure: datetime = Field(..., title="Дата и время вылета в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС")
-    arrival: datetime = Field(..., title="Дата и время прилета вв формате ГГГГ-ММ-ДД ЧЧ:ММ:СС")
+    departure_date: date = Field(..., title="Дата вылета в формате ГГГГ-ММ-ДД")
+    departure_time: time = Field(..., title="Время вылета в формате ЧЧ:ММ:СС")
+    arrival_date: date = Field(..., title="Дата прилета вв формате ГГГГ-ММ-ДД")
+    arrival_time: time = Field(..., title="Время прилета в формате ЧЧ:ММ:СС")
     status: str = Field(..., title="Статус рейса (Например: Готов, Отменен")
 
 
@@ -30,6 +34,8 @@ class SUpdateFlight(BaseModel):
     plane_id: Optional[int] = Field(None, title="ID модели самолета")
     departure_from: Optional[int] = Field(None, title="ID места вылета")
     arrival_to: Optional[int] = Field(None, title="ID места прилета")
-    departure: Optional[datetime] = Field(None, title="Дата и время вылета в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС")
-    arrival: Optional[datetime] = Field(None, title="Дата и время прилета в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС")
+    departure_date: date = Field(..., title="Дата вылета в формате ГГГГ-ММ-ДД")
+    departure_time: time = Field(..., title="Время вылета в формате ЧЧ:ММ:СС")
+    arrival_date: date = Field(..., title="Дата прилета вв формате ГГГГ-ММ-ДД")
+    arrival_time: time = Field(..., title="Время прилета в формате ЧЧ:ММ:СС")
     status: Optional[str] = Field(None, title="Статус рейса (Например: Готов, Отменен)")

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter
-from fastapi.openapi.utils import get_openapi
 
+from app.config import run_migrations
 from app.api.flights_api import router as router_flights
 from app.api.planes_api import router as router_plane
 from app.api.tickets_api import router as router_tickets
@@ -8,6 +8,9 @@ from app.api.passengers_api import router as router_passengers
 from app.api.airports_api import router as router_airports
 from app.api.users_api import router as router_users
 from app.api.auth_api import router as router_security
+
+from app.repositories.role_repository import RoleRepository
+from starlette.concurrency import run_in_threadpool
 
 def register_routes(app: FastAPI) -> None:
     root_router = APIRouter()
@@ -27,6 +30,7 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(router_security)
 
 
+
 def create_app() -> FastAPI:
     app = FastAPI(
         title="Информационная система авиакомпании",
@@ -38,6 +42,11 @@ def create_app() -> FastAPI:
     return app
 
 app = create_app()
+
+@app.on_event("startup")
+async def startup_event():
+    await run_in_threadpool(run_migrations)
+    await RoleRepository.seed_roles()
 
 
 
