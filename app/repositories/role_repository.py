@@ -14,13 +14,9 @@ class RoleRepository(BaseRepository):
             roles_result = await session.execute(query)
             roles = roles_result.scalars().all()
             if not roles:
-                print("Роли не найдены. Добавление ролей user и admin.... Готово!")
                 session.add_all([
                     Role(name="user"),
                     Role(name="admin"),
                 ])
                 await session.commit()
-            else:
-                print("Роли обнаружены. Ничего добавлять не требуется!")
-
 

@@ -3,7 +3,7 @@ from app.models.plane import Plane
 from sqlalchemy import update as sqlalchemy_update, select, delete as sqlalchemy_delete
 from app.database import async_session_maker
 from sqlalchemy.exc import SQLAlchemyError
-from app.exceptions.PlaneExceptions import InformationNotFoundException
+from app.exceptions.PlaneExceptions import PlaneNotFound
 
 
 class PlaneRepository(BaseRepository):
@@ -16,7 +16,7 @@ class PlaneRepository(BaseRepository):
             result_order = await session.execute(query)
             order = result_order.scalar_one_or_none()
             if not order:
-                raise InformationNotFoundException
+                raise PlaneNotFound(plane_id)
 
     @classmethod
     async def update_plane_info(cls, plane_id: int, **update_fields) -> int:

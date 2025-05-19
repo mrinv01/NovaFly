@@ -9,3 +9,6 @@ pydantic-settings~=2.8.1
 alembic~=1.15.2
 passlib~=1.7.4
 python-jose~=3.4.0
+pytest
+pytest-asyncio
+loguru==0.7.2

@@ -35,14 +35,14 @@ class FlightService:
         await AirportRepository.check_airport(flight.departure_from)
         await AirportRepository.check_airport(flight.arrival_to)
 
-        check = await FlightRepository.add(**flight.dict())
+        check = await FlightRepository.add(**flight.model_dump())
         if check:
             return {"message": "Рейс успешно создан!", "flight": flight}
         return {"message": "При создании рейса произошла ошибка!"}
 
     @staticmethod
     async def update_flight(flight_id: int, update_data: SUpdateFlight):
-        update_dict = update_data.dict(exclude_none=True)
+        update_dict = update_data.model_dump(exclude_none=True)
         updated_rows = await FlightRepository.update_flight_info(flight_id, **update_dict)
         if updated_rows == 0:
             raise InformationNotFoundException

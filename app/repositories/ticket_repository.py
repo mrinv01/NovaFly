@@ -3,7 +3,7 @@ from app.models.tickets import Ticket
 from sqlalchemy import update as sqlalchemy_update, select
 from app.database import async_session_maker
 from sqlalchemy.exc import SQLAlchemyError
-from app.exceptions.TicketExceptions import TicketExceptions
+from app.exceptions.TicketExceptions import TicketNotFound
 
 class TicketRepository(BaseRepository):
     model = Ticket
@@ -15,7 +15,7 @@ class TicketRepository(BaseRepository):
             result_order = await session.execute(query)
             order = result_order.scalar_one_or_none()
             if not order:
-                raise TicketExceptions.TicketNotFound(ticket_id)
+                raise TicketNotFound(ticket_id)
 
     @classmethod
     async def update_ticket_info(cls, ticket_id: int, **update_fields) -> int:

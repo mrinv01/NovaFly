@@ -1,7 +1,5 @@
-from datetime import date, datetime
 from typing import Optional
-import re
-from pydantic import BaseModel, Field, EmailStr, validator, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict
 
 class TicketSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)

@@ -1,19 +1,22 @@
-from fastapi import status, HTTPException
+from fastapi import HTTPException, status
 
-InformationNotFoundException = HTTPException(
-    status_code=status.HTTP_404_NOT_FOUND,
-    detail="Нет рейсов, которые соответствуют условиям поиска"
-)
+class InformationNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Нет рейсов, которые соответствуют условиям поиска"
+        )
 
-NoFlights = HTTPException(
-    status_code=status.HTTP_404_NOT_FOUND,
-    detail="Нет рейсов для отображения"
-)
+class NoFlights(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Нет рейсов для отображения"
+        )
 
-class FlightExceptions(HTTPException):
-    def FlightNotFound(flight_id: int):
-        exception = HTTPException(
+class FlightNotFound(HTTPException):
+    def __init__(self, flight_id: int):
+        super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Рейс с id {flight_id} не найден!"
         )
-        return exception

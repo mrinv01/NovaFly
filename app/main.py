@@ -1,6 +1,8 @@
 from fastapi import FastAPI, APIRouter
+from loguru import logger
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
-from app.config import run_migrations
 from app.api.flights_api import router as router_flights
 from app.api.planes_api import router as router_plane
 from app.api.tickets_api import router as router_tickets
@@ -10,7 +12,24 @@ from app.api.users_api import router as router_users
 from app.api.auth_api import router as router_security
 
 from app.repositories.role_repository import RoleRepository
-from starlette.concurrency import run_in_threadpool
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[dict, None]:
+    logger.info("Инициализация приложения...")
+
+    try:
+        logger.info("Создание ролей пользователей...")
+        await RoleRepository.seed_roles()
+        logger.info("Роли созданы успешно.")
+    except Exception as e:
+        logger.exception("Ошибка во время старта приложения: {}", e)
+        raise e
+
+    yield
+
+    logger.info("Завершение работы приложения...")
+
 
 def register_routes(app: FastAPI) -> None:
     root_router = APIRouter()
@@ -29,28 +48,15 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(router_users)
     app.include_router(router_security)
 
-
-
 def create_app() -> FastAPI:
     app = FastAPI(
         title="Информационная система авиакомпании",
         description="API для управления рейсами, пользователями и билетами.",
-        version="1.0.0"
+        version="1.0.0",
+        lifespan=lifespan,
     )
-    register_routes(app)
 
+    register_routes(app)
     return app
 
 app = create_app()
-
-@app.on_event("startup")
-async def startup_event():
-    await run_in_threadpool(run_migrations)
-    await RoleRepository.seed_roles()
-
-
-
-
-
-
-

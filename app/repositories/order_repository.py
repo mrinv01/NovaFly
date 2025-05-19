@@ -3,7 +3,7 @@ from sqlalchemy import update as sqlalchemy_update, select
 from app.models.order import Order
 from app.repositories.base_repository import BaseRepository
 from app.database import async_session_maker
-from app.exceptions.OrderExceptions import OrderExceptions
+from app.exceptions.OrderExceptions import OrderNotFound
 
 class OrderRepository(BaseRepository):
     model = Order
@@ -15,7 +15,7 @@ class OrderRepository(BaseRepository):
             result_order = await session.execute(query)
             order = result_order.scalar_one_or_none()
             if not order:
-                raise OrderExceptions.OrderNotFound(order_id)
+                raise OrderNotFound(order_id)
 
     @classmethod
     async def update_status(cls, order_id: int, new_status: str) -> int:

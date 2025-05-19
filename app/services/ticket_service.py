@@ -2,7 +2,7 @@ from app.schemas.ticket_schemas import SAddTicket, SUpdateTicket
 from app.repositories.ticket_repository import TicketRepository
 from app.repositories.passenger_repository import PassengerRepository
 from app.repositories.flight_repository import FlightRepository
-from app.exceptions.TicketExceptions import TicketExceptions
+from app.exceptions.TicketExceptions import TicketNotFound, NoTicketsForUser
 
 
 class TicketService:
@@ -11,7 +11,7 @@ class TicketService:
     async def get_user_tickets(user_id: int):
         tickets = await TicketRepository.find_all(user_id=user_id)
         if not tickets:
-            raise TicketExceptions.NoTicketsForUser
+            raise NoTicketsForUser()
         return tickets
 
     @staticmethod
@@ -42,4 +42,4 @@ class TicketService:
         check = await TicketRepository.delete(id=ticket_id)
         if check:
             return {"message": f"Билет с id {ticket_id} удален!"}
-        raise TicketExceptions.TicketNotFound(ticket_id)
+        raise TicketNotFound(ticket_id)

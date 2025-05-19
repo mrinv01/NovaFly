@@ -1,13 +1,15 @@
-from fastapi import status, HTTPException
+from fastapi import HTTPException, status
 
+class OrderNotFound(HTTPException):
+    def __init__(self, id: int):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"У пользователя с id {id} нет заказов!"
+        )
 
-class OrderExceptions(BaseException):
-    def OrderNotFound(id: int):
-        exception = HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                  detail= f"У пользователя с id {id} нет заказов!")
-        return exception
-
-    def UserNotFound(id: int):
-        exception = HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                  detail= f"Пользователь с id {id} не найден!")
-        return exception
+class UserNotFound(HTTPException):
+    def __init__(self, id: int):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Пользователь с id {id} не найден!"
+        )

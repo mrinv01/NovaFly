@@ -1,5 +1,5 @@
 from app.repositories.order_repository import OrderRepository
-from app.exceptions.OrderExceptions import OrderExceptions
+from app.exceptions.OrderExceptions import OrderNotFound
 from app.schemas.order_schemas import SUpdateOrder
 
 
@@ -9,7 +9,7 @@ class OrderService:
     async def get_orders_by_user(user_id: int):
         result = await OrderRepository.find_all(user_id=user_id)
         if not result:
-            raise OrderExceptions.OrderNotFound(user_id)
+            raise OrderNotFound(user_id)
         return result
 
     @staticmethod

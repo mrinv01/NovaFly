@@ -7,13 +7,12 @@ InformationNotFoundException = HTTPException(
 
 CreateException = HTTPException(
     status_code=status.HTTP_400_BAD_REQUEST,
-    detail="Ошибка при создании объекта"
+    detail="Ошибка при добавлении самолета"
 )
 
-class PlaneExceptions(HTTPException):
-    def PlaneNotFound(plane_id: int):
-        exception = HTTPException(
+class PlaneNotFound(HTTPException):
+    def _init__(self, plane_id: int):
+        super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Самолет с id {plane_id} не найден!"
         )
-        return exception

@@ -2,7 +2,7 @@ from sqlalchemy import select
 from app.repositories.base_repository import BaseRepository
 from app.database import async_session_maker
 from app.models.passenger import Passenger
-from app.exceptions.PassengerExceptions import PassengerExceptions
+from app.exceptions.PassengerExceptions import PassengerNotFound
 
 class PassengerRepository(BaseRepository):
     model = Passenger
@@ -14,4 +14,4 @@ class PassengerRepository(BaseRepository):
             result_order = await session.execute(query)
             order = result_order.scalar_one_or_none()
             if not order:
-                raise PassengerExceptions.PassengerNotFound(order_id)
+                raise PassengerNotFound(order_id)

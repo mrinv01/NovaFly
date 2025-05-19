@@ -1,8 +1,4 @@
-import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from alembic import command
-from alembic.config import Config
-
 
 class Settings(BaseSettings):
     DB_HOST: str
@@ -12,9 +8,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     SECRET_KEY: str
     ALGORITHM: str
-    model_config = SettingsConfigDict(
-        env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
-    )
+    model_config = SettingsConfigDict(env_file=".env")
 
 
 settings = Settings()
@@ -24,6 +18,3 @@ def get_db_url():
     return (f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD}@"
             f"{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}")
 
-def run_migrations():
-    alembic_cfg = Config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "alembic.ini"))
-    command.upgrade(alembic_cfg, "head")

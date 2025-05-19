@@ -2,7 +2,7 @@ from app.repositories.base_repository import BaseRepository
 from app.models.airports import Airport
 from app.database import async_session_maker
 from sqlalchemy import select
-from app.exceptions.AirportExceptions import AirportExceptions
+from app.exceptions.AirportExceptions import AirportNotFound
 
 class AirportRepository(BaseRepository):
     model = Airport
@@ -21,4 +21,4 @@ class AirportRepository(BaseRepository):
             result_order = await session.execute(query)
             order = result_order.scalar_one_or_none()
             if not order:
-                raise AirportExceptions.AirportNotFound(airport_id)
+                raise AirportNotFound(airport_id)
